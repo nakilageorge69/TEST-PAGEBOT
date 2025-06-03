@@ -5,12 +5,8 @@ const fs = require("fs");
 const token = fs.readFileSync("token.txt", "utf8");
 
 const apiKeys = [
-  "ec7d563d-adae-4048-af08-0a5252f336d1",
-  "",
-  "",
-  "",
-  "",
-  ""
+  "aafe0d9d17114eb257c6b98a02a6047cf0f7e4f5cd956515f2d3f295e8fb8b56", // Main API Key
+  "", "", "", "", ""
 ];
 
 const fontMapping = {
@@ -62,16 +58,16 @@ module.exports = {
 };
 
 const handleGeminiResponse = async (senderId, input, pageAccessToken) => {
-  const systemRole = "You are 𝗔𝗿𝗹𝗲𝗻𝗲 𝗔𝗜, a lovely assistant who helps kindly and creatively.";
-  const prompt = `${systemRole}\n${input}`;
+  const roleplay = "You are 𝗔𝗿𝗹𝗲𝗻𝗲 𝗔𝗜, a lovely assistant who helps kindly and creatively.";
+  const encodedPrompt = encodeURIComponent(input);
 
   for (let i = 0; i < apiKeys.length; i++) {
     const apiKey = apiKeys[i];
-    const apiUrl = `https://kaiz-apis.gleeze.com/api/gemini-vision?q=${encodeURIComponent(prompt)}&uid=${senderId}&apikey=${apiKey}`;
+    const apiUrl = `https://haji-mix.up.railway.app/api/gpt4o?ask=${encodedPrompt}&uid=${senderId}&roleplay=${encodeURIComponent(roleplay)}&api_key=${apiKey}`;
 
     try {
       const { data } = await axios.get(apiUrl);
-      let responseText = data.response || "❌ No response from Arlene.";
+      let responseText = data.answer || "❌ No response from Arlene.";
 
       const whoRegex = /(who\s+are\s+you|what'?s\s+your\s+name|identify\s+yourself|who\s+is\s+this|what\s+are\s+you|are\s+you\s+a\s+bot|are\s+you\s+human)/i;
       if (whoRegex.test(input) && !/Arlene AI/i.test(responseText)) {
@@ -89,7 +85,7 @@ ${formatted}
 
       return await sendConcatenatedMessage(senderId, message, pageAccessToken);
     } catch (error) {
-      console.warn(`Key failed [${apiKey}]: ${error.message}`);
+      console.warn(`API key failed [${apiKey}]: ${error.message}`);
       if (i === apiKeys.length - 1) {
         return sendError(senderId, "❌ Error: All API keys failed or quota exceeded.", pageAccessToken);
       }

@@ -2,9 +2,9 @@ const axios = require('axios');
 const { sendMessage } = require('../handles/sendMessage');
 
 module.exports = {
-  name: 'copytext',
+  name: 'ocr',
   description: 'Extract text from an image using OCR.',
-  usage: 'send image then type copytext',
+  usage: 'send image then type ocr',
   author: 'developer',
 
   async execute(senderId, args, pageAccessToken, imageUrl) {

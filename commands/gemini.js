@@ -20,7 +20,7 @@ function convertToBold(text) {
 }
 
 module.exports = {
-  name: "recognize",
+  name: "gemini",
   description: "Analyze image and question using Gemini",
   author: "developer",
 
